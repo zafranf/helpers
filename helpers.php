@@ -470,7 +470,6 @@ if (!function_exists('public_path')) {
      */
     function public_path($str = '')
     {
-        define('PUBLIC_PATH', '/sites/public');
         return PUBLIC_PATH . $str;
     }
 }
