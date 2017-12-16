@@ -436,7 +436,7 @@ if (!function_exists('loadCSS')) {
      * @param string $file
      * @return void
      */
-    function loadCSS($file = '')
+    function loadCSS($file = "")
     {
         $mtime = filemtime(public_path($file));
 
@@ -452,7 +452,7 @@ if (!function_exists('loadJS')) {
      * @param boolean $async
      * @return void
      */
-    function loadJS($file = '', $async = false)
+    function loadJS($file = "", $async = false)
     {
         $mtime = filemtime(public_path($file));
         $async = ($async) ? 'async' : '';
@@ -465,11 +465,11 @@ if (!function_exists('public_path')) {
     /**
      * Get public folder path
      *
-     * @param string $str
+     * @param string $tofile
      * @return void
      */
-    function public_path($str = '')
+    function public_path($tofile = "")
     {
-        return PUBLIC_PATH . $str;
+        return PUBLIC_PATH . $tofile;
     }
 }
