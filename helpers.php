@@ -17,22 +17,6 @@ if (!function_exists('debug')) {
     }
 }
 
-if (!function_exists('nf')) {
-    /**
-     * Alias for number_format
-     *
-     * @param integer $num
-     * @param integer $digit
-     * @param string $coms
-     * @param string $dots
-     * @return void
-     */
-    function nf($num, $digit = 0, $coms = ",", $dots = ".")
-    {
-        return number_format($num, $digit, $coms, $dots);
-    }
-}
-
 if (!function_exists('slug')) {
     /**
      * Convert string to slug
@@ -43,7 +27,7 @@ if (!function_exists('slug')) {
      */
     function slug($str, $separator = "-")
     {
-        $slug = strtolower($str);
+        $slug = lowcase($str);
         $slug = preg_replace('([\s\W\_]+)', $separator, $slug);
 
         return $slug;
@@ -74,6 +58,22 @@ if (!function_exists('cutText')) {
     }
 }
 
+if (!function_exists('nf')) {
+    /**
+     * Alias for number_format
+     *
+     * @param integer $num
+     * @param integer $digit
+     * @param string $coms
+     * @param string $dots
+     * @return void
+     */
+    function nf($num, $digit = 0, $coms = ",", $dots = ".")
+    {
+        return number_format($num, $digit, $coms, $dots);
+    }
+}
+
 if (!function_exists('upcase')) {
     /**
      * Alias for strtoupper
@@ -84,84 +84,6 @@ if (!function_exists('upcase')) {
     function upcase($str = "")
     {
         return strtoupper($str);
-    }
-}
-
-if (!function_exists('lowcase')) {
-    /**
-     * Alias for strtolower
-     *
-     * @param string $str
-     * @return void
-     */
-    function lowcase($str = "")
-    {
-        return strtolower($str);
-    }
-}
-
-if (!function_exists('url')) {
-    /**
-     * Create url
-     *
-     * @param string $url
-     * @param boolean $full
-     * @return void
-     */
-    function url($url = "", $full = false)
-    {
-        if (filter_var($url, FILTER_VALIDATE_URL)) {
-            return $url;
-        }
-        if ($full) {
-            $urls = explode("?", $_SERVER['REQUEST_URI']);
-            $segment = $urls[0];
-        }
-        return sprintf(
-            "%s://%s%s%s",
-            isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' ? 'https' : 'http',
-            $_SERVER['SERVER_NAME'] . '/',
-            isset($segment) ? ltrim($segment, '/') : '',
-            $url != "/" ? ltrim($url, '/') : ''
-        );
-    }
-}
-
-if (!function_exists('bool')) {
-    /**
-     * Convert string to boolean
-     *
-     * @param string $str
-     * @return void
-     */
-    function bool($str = "")
-    {
-        if (is_string($str) || is_int($str)) {
-            $str = strtolower(trim($str));
-            if ($str == 'true' || $str == 't' || $str == 'yes' || $str == 'y' || $str == '1') {
-                return true;
-            }
-        }
-
-        return false;
-    }
-}
-
-if (!function_exists('is_json')) {
-    /**
-     * Validate string to json
-     *
-     * @param string $data
-     * @return boolean
-     */
-    function is_json($data = null)
-    {
-        if (!is_null($data)) {
-            @json_decode($data);
-            return (json_last_error() === JSON_ERROR_NONE);
-        }
-
-        return false;
     }
 }
 
@@ -194,7 +116,7 @@ if (!function_exists('_server')) {
         }
 
         /* Check requested string */
-        $key = strtoupper($key);
+        $key = upcase($key);
         if (isset($_SERVER[$key])) {
             return $_SERVER[$key];
         }
@@ -329,7 +251,7 @@ if (!function_exists('_files')) {
     function _files($key = null)
     {
         /* rearrange files */
-        $_FILES = reArrangeFiles();
+        $_FILES = rearrangeFiles();
 
         /* Check $key */
         if (is_null($key)) {
@@ -387,14 +309,14 @@ if (!function_exists('_file')) {
     }
 }
 
-if (!function_exists('reArrangeFiles')) {
+if (!function_exists('rearrangeFiles')) {
     /**
      * Rearrange recursive $_FILES
      * http://php.net/manual/en/features.file-upload.multiple.php#118180
      *
      * @return void
      */
-    function reArrangeFiles()
+    function rearrangeFiles()
     {
         $walker = function ($files, $fileInfokey, callable $walker) {
             $ret = [];
@@ -429,6 +351,81 @@ if (!function_exists('reArrangeFiles')) {
     }
 }
 
+if (!function_exists('lowcase')) {
+    /**
+     * Alias for strtolower
+     *
+     * @param string $str
+     * @return void
+     */
+    function lowcase($str = "")
+    {
+        return strtolower($str);
+    }
+}
+
+if (!function_exists('url')) {
+    /**
+     * Create url
+     *
+     * @param string $url
+     * @param boolean $full
+     * @return void
+     */
+    function url($url = "", $pars = [])
+    {
+        if (filter_var($url, FILTER_VALIDATE_URL)) {
+            return $url;
+        }
+        
+        return sprintf(
+            "%s://%s%s%s",
+            isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' ? 'https' : 'http',
+            $_SERVER['SERVER_NAME'] . '/',
+            $url != "/" ? ltrim($url, '/') : '',
+            !empty($pars) ? '?' . http_build_query($pars) : ''
+        );
+    }
+}
+
+if (!function_exists('bool')) {
+    /**
+     * Convert string to boolean
+     *
+     * @param string $str
+     * @return void
+     */
+    function bool($str = "")
+    {
+        if (is_string($str) || is_int($str)) {
+            $str = strtolower(trim($str));
+            if ($str == 'true' || $str == 't' || $str == 'yes' || $str == 'y' || $str == '1') {
+                return true;
+            }
+        }
+
+        return false;
+    }
+}
+
+if (!function_exists('is_json')) {
+    /**
+     * Validate string to json
+     *
+     * @param string $data
+     * @return boolean
+     */
+    function is_json($data = null)
+    {
+        if (!is_null($data)) {
+            @json_decode($data);
+            return (json_last_error() === JSON_ERROR_NONE);
+        }
+
+        return false;
+    }
+}
+
 if (!function_exists('loadCSS')) {
     /**
      * Generate link stylesheet tag
@@ -438,9 +435,13 @@ if (!function_exists('loadCSS')) {
      */
     function loadCSS($file = "")
     {
-        $mtime = filemtime(public_path($file));
+        if (file_exists(public_path($file))) {
+            $mtime = filemtime(public_path($file));
 
-        return '<link href="' . url($file) . '?' . $mtime . '" rel="stylesheet">';
+            return '<link href="' . url($file) . '?' . $mtime . '" rel="stylesheet">';
+        }
+
+        return null;
     }
 }
 
@@ -454,10 +455,14 @@ if (!function_exists('loadJS')) {
      */
     function loadJS($file = "", $async = false)
     {
-        $mtime = filemtime(public_path($file));
-        $async = ($async) ? 'async' : '';
+        if (file_exists(public_path($file))) {
+            $mtime = filemtime(public_path($file));
+            $async = ($async) ? 'async' : '';
 
-        return '<script src="' . url($file) . '?' . $mtime . '" ' . $async . '></script>';
+            return '<script src="' . url($file) . '?' . $mtime . '" ' . $async . '></script>';
+        }
+
+        return null;
     }
 }
 
