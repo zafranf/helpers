@@ -260,9 +260,7 @@ if (!function_exists('_files')) {
 
         /* Check requested string */
         if (isset($_FILES[$key])) {
-            $val = $_FILES[$key];
-
-            return _file($file);
+            return _file($key);
         }
 
         return null;
@@ -399,7 +397,7 @@ if (!function_exists('bool')) {
     {
         if (is_string($str) || is_int($str)) {
             $str = strtolower(trim($str));
-            if ($str == 'true' || $str == 't' || $str == 'yes' || $str == 'y' || $str == '1') {
+            if ($str == 'true' || $str == 't' || $str == 'yes' || $str == 'y' || $str == '1' || $str == 'on') {
                 return true;
             }
         }
