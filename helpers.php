@@ -23,7 +23,7 @@ if (!function_exists('slug')) {
      *
      * @param string $str
      * @param string $separator
-     * @return void
+     * @return string
      */
     function slug($str, $separator = "-")
     {
@@ -42,7 +42,7 @@ if (!function_exists('cutText')) {
      * @param integer $start
      * @param integer $end
      * @param string $separator
-     * @return void
+     * @return string
      */
     function cutText($text, $start = 50, $end = 5, $separator = "...")
     {
@@ -66,7 +66,7 @@ if (!function_exists('nf')) {
      * @param integer $digit
      * @param string $coms
      * @param string $dots
-     * @return void
+     * @return string
      */
     function nf($num, $digit = 0, $coms = ",", $dots = ".")
     {
@@ -93,7 +93,7 @@ if (!function_exists('_server')) {
      * Alias for $_SERVER
      *
      * @param string $key
-     * @return void
+     * @return array
      */
     function _server($key = null)
     {
@@ -117,7 +117,7 @@ if (!function_exists('_session')) {
      * Alias for $_SESSION
      *
      * @param string $key
-     * @return void
+     * @return array
      */
     function _session($key = null)
     {
@@ -141,7 +141,7 @@ if (!function_exists('_input')) {
      *
      * @param string $key
      * @param boolean $int
-     * @return void
+     * @return array
      */
     function _input($key = null, $int = false)
     {
@@ -172,7 +172,7 @@ if (!function_exists('_get')) {
      *
      * @param string $key
      * @param boolean $int
-     * @return void
+     * @return array
      */
     function _get($key = null, $int = false)
     {
@@ -203,7 +203,7 @@ if (!function_exists('_post')) {
      *
      * @param string $key
      * @param boolean $int
-     * @return void
+     * @return array
      */
     function _post($key = null, $int = false)
     {
@@ -233,7 +233,7 @@ if (!function_exists('_files')) {
      * Alias for $_FILES
      *
      * @param string $key
-     * @return void
+     * @return array
      */
     function _files($key = null)
     {
@@ -259,7 +259,7 @@ if (!function_exists('_file')) {
      * Get file detail in $_FILES
      *
      * @param string $name
-     * @return void
+     * @return array
      */
     function _file($name)
     {
@@ -299,7 +299,7 @@ if (!function_exists('rearrangeFiles')) {
      * Rearrange recursive $_FILES
      * http://php.net/manual/en/features.file-upload.multiple.php#118180
      *
-     * @return void
+     * @return array
      */
     function rearrangeFiles()
     {
@@ -341,7 +341,7 @@ if (!function_exists('upcase')) {
      * Alias for strtoupper
      *
      * @param string $str
-     * @return void
+     * @return string
      */
     function upcase($str = "")
     {
@@ -354,7 +354,7 @@ if (!function_exists('lowcase')) {
      * Alias for strtolower
      *
      * @param string $str
-     * @return void
+     * @return string
      */
     function lowcase($str = "")
     {
@@ -368,7 +368,7 @@ if (!function_exists('url')) {
      *
      * @param string $url
      * @param boolean $full
-     * @return void
+     * @return string
      */
     function url($url = "", $pars = [])
     {
@@ -391,7 +391,7 @@ if (!function_exists('bool')) {
      * Convert string to boolean
      *
      * @param string $str
-     * @return void
+     * @return boolean
      */
     function bool($str = "")
     {
@@ -430,7 +430,7 @@ if (!function_exists('loadCSS')) {
      * Generate link stylesheet tag
      *
      * @param string $file
-     * @return void
+     * @return string
      */
     function loadCSS($file = "")
     {
@@ -448,7 +448,7 @@ if (!function_exists('loadJS')) {
      *
      * @param string $file
      * @param boolean $async
-     * @return void
+     * @return string
      */
     function loadJS($file = "", $async = false)
     {
@@ -466,7 +466,7 @@ if (!function_exists('public_path')) {
      * Get public folder path
      *
      * @param string $tofile
-     * @return void
+     * @return string
      */
     function public_path($tofile = "")
     {
