@@ -74,19 +74,6 @@ if (!function_exists('nf')) {
     }
 }
 
-if (!function_exists('upcase')) {
-    /**
-     * Alias for strtoupper
-     *
-     * @param string $str
-     * @return void
-     */
-    function upcase($str = "")
-    {
-        return strtoupper($str);
-    }
-}
-
 if (!function_exists('redirect')) {
     /**
      * Alias for header location
@@ -349,6 +336,19 @@ if (!function_exists('rearrangeFiles')) {
     }
 }
 
+if (!function_exists('upcase')) {
+    /**
+     * Alias for strtoupper
+     *
+     * @param string $str
+     * @return void
+     */
+    function upcase($str = "")
+    {
+        return strtoupper($str);
+    }
+}
+
 if (!function_exists('lowcase')) {
     /**
      * Alias for strtolower
@@ -395,11 +395,12 @@ if (!function_exists('bool')) {
      */
     function bool($str = "")
     {
+        $true = ['true', 't', 'yes', 'y', '1', 'on'];
+
         if (is_string($str) || is_int($str)) {
             $str = strtolower(trim($str));
-            if ($str == 'true' || $str == 't' || $str == 'yes' || $str == 'y' || $str == '1' || $str == 'on') {
-                return true;
-            }
+
+            return in_array($str, $true);
         }
 
         return false;
@@ -438,8 +439,6 @@ if (!function_exists('loadCSS')) {
 
             return '<link href="' . url($file) . '?' . $mtime . '" rel="stylesheet">';
         }
-
-        return null;
     }
 }
 
@@ -459,8 +458,6 @@ if (!function_exists('loadJS')) {
 
             return '<script src="' . url($file) . '?' . $mtime . '" ' . $async . '></script>';
         }
-
-        return null;
     }
 }
 
