@@ -397,7 +397,7 @@ if (!function_exists('bool')) {
     {
         $true = ['true', 't', 'yes', 'y', '1', 'on'];
 
-        if (is_string($str) || is_int($str)) {
+        if (is_string($str) || is_int($str) || is_bool($str)) {
             $str = strtolower(trim($str));
 
             return in_array($str, $true);
