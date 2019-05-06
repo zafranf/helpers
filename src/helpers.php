@@ -34,7 +34,7 @@ if (!function_exists('slug')) {
     }
 }
 
-if (!function_exists('cutText')) {
+if (!function_exists('cut')) {
     /**
      * Cut some text
      *
@@ -44,7 +44,7 @@ if (!function_exists('cutText')) {
      * @param string $separator
      * @return string
      */
-    function cutText($text, $start = 50, $end = 5, $separator = "...")
+    function cut($text, $start = 50, $end = 5, $separator = "...")
     {
         $min = $start + $end;
         if (strlen($text) > $min) {
@@ -129,6 +129,29 @@ if (!function_exists('_session')) {
         /* Check requested string */
         if (isset($_SESSION[$key])) {
             return $_SESSION[$key];
+        }
+
+        return null;
+    }
+}
+
+if (!function_exists('_cookie')) {
+    /**
+     * Alias for $_COOKIE
+     *
+     * @param string $key
+     * @return array
+     */
+    function _cookie($key = null)
+    {
+        /* Check $key */
+        if (is_null($key)) {
+            return $_COOKIE;
+        }
+
+        /* Check requested string */
+        if (isset($_COOKIE[$key])) {
+            return $_COOKIE[$key];
         }
 
         return null;
@@ -238,7 +261,7 @@ if (!function_exists('_files')) {
     function _files($key = null)
     {
         /* rearrange files */
-        $_FILES = rearrangeFiles();
+        $_FILES = _rearrange_files();
 
         /* Check $key */
         if (is_null($key)) {
@@ -294,14 +317,14 @@ if (!function_exists('_file')) {
     }
 }
 
-if (!function_exists('rearrangeFiles')) {
+if (!function_exists('_rearrange_files')) {
     /**
      * Rearrange recursive $_FILES
      * http://php.net/manual/en/features.file-upload.multiple.php#118180
      *
      * @return array
      */
-    function rearrangeFiles()
+    function _rearrange_files()
     {
         $walker = function ($files, $fileInfokey, callable $walker) {
             $ret = [];
@@ -372,17 +395,27 @@ if (!function_exists('url')) {
      */
     function url($url = "", $pars = [])
     {
+        /* validas8 */
         if (filter_var($url, FILTER_VALIDATE_URL)) {
             return $url;
         }
-        
-        return sprintf(
-            "%s://%s%s%s",
-            isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' ? 'https' : 'http',
-            $_SERVER['SERVER_NAME'] . '/',
-            $url != "/" ? ltrim($url, '/') : '',
-            !empty($pars) ? '?' . http_build_query($pars) : ''
-        );
+
+        /* set variable */
+        $http = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') ? 'https' : 'http';
+        if (_server('HTTP_CF_VISITOR') !== null) {
+            $cf = json_decode(_server('HTTP_CF_VISITOR'));
+            if (isset($cf->scheme)) {
+                $http = $cf->scheme;
+            }
+        }
+        $s1 = $secure ? 'https' : $http;
+        $s2 = _server('SERVER_NAME') . '/';
+        if (!filter_var($s2, FILTER_VALIDATE_URL)) {
+            $s2 = _server('HTTP_HOST') . '/';
+        }
+        $s3 = ($url != "/") ? ltrim($url, '/') : '';
+
+        return sprintf("%s://%s%s", $s1, $s2, $s3);
     }
 }
 
@@ -425,38 +458,52 @@ if (!function_exists('is_json')) {
     }
 }
 
-if (!function_exists('loadCSS')) {
+if (!function_exists('_load_css')) {
     /**
      * Generate link stylesheet tag
      *
      * @param string $file
+     * @param array $attributes
      * @return string
      */
-    function loadCSS($file = "")
+    function _load_css($file = "", $attributes = [])
     {
         if (file_exists(public_path($file))) {
             $mtime = filemtime(public_path($file));
+            $attr = ' rel="stylesheet"';
+            if (!empty($attributes)) {
+                $attr = '';
+                foreach ($attributes as $key => $value) {
+                    $attr .= ' ' . $key . '="' . $value . '"';
+                }
+            }
 
-            return '<link href="' . url($file) . '?' . $mtime . '" rel="stylesheet">';
+            return '<link href="' . url($file) . '?' . $mtime . '"' . $attr . '>';
         }
     }
 }
 
-if (!function_exists('loadJS')) {
+if (!function_exists('_load_js')) {
     /**
      * Generate script tag
      *
      * @param string $file
-     * @param boolean $async
+     * @param array $attributes
      * @return string
      */
-    function loadJS($file = "", $async = false)
+    function _load_js($file = "", $attributes = [])
     {
         if (file_exists(public_path($file))) {
             $mtime = filemtime(public_path($file));
-            $async = ($async) ? 'async' : '';
+            $attr = ' type="text/javascript"';
+            if (!empty($attributes)) {
+                $attr = '';
+                foreach ($attributes as $key => $value) {
+                    $attr .= ' ' . $key . '="' . $value . '"';
+                }
+            }
 
-            return '<script src="' . url($file) . '?' . $mtime . '" ' . $async . '></script>';
+            return '<script src="' . url($file) . '?' . $mtime . '"' . $attr . '></script>';
         }
     }
 }
@@ -465,11 +512,11 @@ if (!function_exists('public_path')) {
     /**
      * Get public folder path
      *
-     * @param string $tofile
+     * @param string $file
      * @return string
      */
-    function public_path($tofile = "")
+    function public_path($file = "")
     {
-        return PUBLIC_PATH . $tofile;
+        return PUBLIC_PATH . $file;
     }
 }

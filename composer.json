@@ -1,0 +1,17 @@
+{
+    "name": "zafranf/helpers",
+    "description": "Helper Functions",
+    "type": "library",
+    "license": "WTFPL",
+    "authors": [{
+        "name": "Zafran Fadilah",
+        "email": "fadilah@zafran.id"
+    }],
+    "minimum-stability": "stable",
+    "require": {},
+    "autoload": {
+        "files": [
+            "src/helpers.php"
+        ]
+    }
+}
