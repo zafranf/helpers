@@ -58,6 +58,16 @@ if (!function_exists('cut')) {
     }
 }
 
+if (!function_exists('sanitize')) {
+    /**
+     * Sanitize string
+     */
+    function sanitize($string)
+    {
+        return trim(e($string));
+    }
+}
+
 if (!function_exists('nf')) {
     /**
      * Alias for number_format
