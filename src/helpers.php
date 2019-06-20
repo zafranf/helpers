@@ -1,103 +1,4 @@
 <?php
-if (!function_exists('debug')) {
-    /**
-     * Debugging variable
-     *
-     * @return void
-     */
-    function debug()
-    {
-        array_map(function ($data) {
-            echo "<pre>";
-            print_r($data);
-            echo "</pre>";
-        }, func_get_args());
-
-        die();
-    }
-}
-
-if (!function_exists('slug')) {
-    /**
-     * Convert string to slug
-     *
-     * @param string $str
-     * @param string $separator
-     * @return string
-     */
-    function slug($str, $separator = "-")
-    {
-        $slug = lowcase($str);
-        $slug = preg_replace('([\s\W\_]+)', $separator, $slug);
-
-        return $slug;
-    }
-}
-
-if (!function_exists('cut')) {
-    /**
-     * Cut some text
-     *
-     * @param string $text
-     * @param integer $start
-     * @param integer $end
-     * @param string $separator
-     * @return string
-     */
-    function cut($text, $start = 50, $end = 5, $separator = "...")
-    {
-        $min = $start + $end;
-        if (strlen($text) > $min) {
-            $head = substr($text, 0, $start);
-            $tail = substr($text, -$end);
-
-            $text = $head . $separator . $tail;
-        }
-
-        return $text;
-    }
-}
-
-if (!function_exists('sanitize')) {
-    /**
-     * Sanitize string
-     */
-    function sanitize($string)
-    {
-        return trim(e($string));
-    }
-}
-
-if (!function_exists('nf')) {
-    /**
-     * Alias for number_format
-     *
-     * @param integer $num
-     * @param integer $digit
-     * @param string $coms
-     * @param string $dots
-     * @return string
-     */
-    function nf($num, $digit = 0, $coms = ",", $dots = ".")
-    {
-        return number_format($num, $digit, $coms, $dots);
-    }
-}
-
-if (!function_exists('redirect')) {
-    /**
-     * Alias for header location
-     *
-     * @param string $url
-     * @return void
-     */
-    function redirect($url = "/")
-    {
-        header("location: " . $url);
-        die();
-    }
-}
-
 if (!function_exists('_server')) {
     /**
      * Alias for $_SERVER
@@ -369,6 +270,105 @@ if (!function_exists('_rearrange_files')) {
     }
 }
 
+if (!function_exists('debug')) {
+    /**
+     * Debugging variable
+     *
+     * @return void
+     */
+    function debug()
+    {
+        array_map(function ($data) {
+            echo "<pre>";
+            print_r($data);
+            echo "</pre>";
+        }, func_get_args());
+
+        die();
+    }
+}
+
+if (!function_exists('slug')) {
+    /**
+     * Convert string to slug
+     *
+     * @param string $str
+     * @param string $separator
+     * @return string
+     */
+    function slug($str, $separator = "-")
+    {
+        $slug = lowcase($str);
+        $slug = preg_replace('([\s\W\_]+)', $separator, $slug);
+
+        return $slug;
+    }
+}
+
+if (!function_exists('cut')) {
+    /**
+     * Cut some text
+     *
+     * @param string $text
+     * @param integer $start
+     * @param integer $end
+     * @param string $separator
+     * @return string
+     */
+    function cut($text, $start = 50, $end = 5, $separator = "...")
+    {
+        $min = $start + $end;
+        if (strlen($text) > $min) {
+            $head = substr($text, 0, $start);
+            $tail = substr($text, -$end);
+
+            $text = $head . $separator . $tail;
+        }
+
+        return $text;
+    }
+}
+
+if (!function_exists('sanitize')) {
+    /**
+     * Sanitize string
+     */
+    function sanitize($string)
+    {
+        return trim(e($string));
+    }
+}
+
+if (!function_exists('nf')) {
+    /**
+     * Alias for number_format
+     *
+     * @param integer $num
+     * @param integer $digit
+     * @param string $coms
+     * @param string $dots
+     * @return string
+     */
+    function nf($num, $digit = 0, $coms = ",", $dots = ".")
+    {
+        return number_format($num, $digit, $coms, $dots);
+    }
+}
+
+if (!function_exists('redirect')) {
+    /**
+     * Alias for header location
+     *
+     * @param string $url
+     * @return void
+     */
+    function redirect($url = "/")
+    {
+        header("location: " . $url);
+        die();
+    }
+}
+
 if (!function_exists('upcase')) {
     /**
      * Alias for strtoupper
@@ -468,7 +468,7 @@ if (!function_exists('is_json')) {
     }
 }
 
-if (!function_exists('_load_css')) {
+if (!function_exists('load_css')) {
     /**
      * Generate link stylesheet tag
      *
@@ -493,7 +493,7 @@ if (!function_exists('_load_css')) {
     }
 }
 
-if (!function_exists('_load_js')) {
+if (!function_exists('load_js')) {
     /**
      * Generate script tag
      *
