@@ -1,4 +1,10 @@
 <?php
+if (defined('APP_PATH')) {
+    if (file_exists(APP_PATH . 'helpers.php')) {
+        include APP_PATH . 'helpers.php';
+    }
+}
+
 if (!function_exists('_server')) {
     /**
      * Alias for $_SERVER
@@ -38,6 +44,7 @@ if (!function_exists('_session')) {
         }
 
         /* Check requested string */
+        $key = upcase($key);
         if (isset($_SESSION[$key])) {
             return $_SESSION[$key];
         }
@@ -61,6 +68,7 @@ if (!function_exists('_cookie')) {
         }
 
         /* Check requested string */
+        $key = upcase($key);
         if (isset($_COOKIE[$key])) {
             return $_COOKIE[$key];
         }
@@ -77,7 +85,7 @@ if (!function_exists('_input')) {
      * @param boolean $int
      * @return array
      */
-    function _input($key = null, $int = false)
+    function _input($key = null, $default = null)
     {
         /* Check $key */
         if (is_null($key)) {
@@ -86,17 +94,10 @@ if (!function_exists('_input')) {
 
         /* Check requested string */
         if (isset($_REQUEST[$key])) {
-            $val = $_REQUEST[$key];
-
-            /* Make it as integer if true */
-            if ($int) {
-                return (int) $val;
-            }
-
-            return $val;
+            return $_REQUEST[$key];
         }
 
-        return null;
+        return $default;
     }
 }
 
@@ -108,7 +109,7 @@ if (!function_exists('_get')) {
      * @param boolean $int
      * @return array
      */
-    function _get($key = null, $int = false)
+    function _get($key = null, $default = null)
     {
         /* Check $key */
         if (is_null($key)) {
@@ -117,17 +118,10 @@ if (!function_exists('_get')) {
 
         /* Check requested string */
         if (isset($_GET[$key])) {
-            $val = $_GET[$key];
-
-            /* Make it as integer if true */
-            if ($int) {
-                return (int) $val;
-            }
-
-            return $val;
+            return $_GET[$key];
         }
 
-        return null;
+        return $default;
     }
 }
 
@@ -139,7 +133,7 @@ if (!function_exists('_post')) {
      * @param boolean $int
      * @return array
      */
-    function _post($key = null, $int = false)
+    function _post($key = null, $default = null)
     {
         /* Check $key */
         if (is_null($key)) {
@@ -148,17 +142,10 @@ if (!function_exists('_post')) {
 
         /* Check requested string */
         if (isset($_POST[$key])) {
-            $val = $_POST[$key];
-
-            /* Make it as integer if true */
-            if ($int) {
-                return (int) $val;
-            }
-
-            return $val;
+            return $_POST[$key];
         }
 
-        return null;
+        return $default;
     }
 }
 
@@ -329,6 +316,20 @@ if (!function_exists('cut')) {
     }
 }
 
+if (!function_exists('spaces')) {
+    /**
+     * Undocumented function
+     *
+     * @param integer $n
+     * @param string $space
+     * @return void
+     */
+    function spaces($n = 4, $space = "&nbsp;")
+    {
+        return str_repeat($space, $n);
+    }
+}
+
 if (!function_exists('sanitize')) {
     /**
      * Sanitize string
@@ -366,6 +367,27 @@ if (!function_exists('redirect')) {
     {
         header("location: " . $url);
         die();
+    }
+}
+
+if (!function_exists('response')) {
+    /**
+     * Undocumented function
+     *
+     * @param [type] $data
+     * @param integer $statusCode
+     * @param boolean $json
+     * @return void
+     */
+    function response($data, $statusCode = 200, $json = true)
+    {
+        http_response_code($statusCode);
+        if ($json) {
+            header('Content-Type: application/json');
+            $data = json_encode($data);
+        }
+
+        die($data);
     }
 }
 
@@ -418,14 +440,14 @@ if (!function_exists('url')) {
                 $http = $cf->scheme;
             }
         }
-        $s1 = $secure ? 'https' : $http;
-        $s2 = _server('SERVER_NAME') . '/';
-        if (!filter_var($s2, FILTER_VALIDATE_URL)) {
-            $s2 = _server('HTTP_HOST') . '/';
+        $scheme = $secure ? 'https' : $http;
+        $server_host = _server('SERVER_NAME') . '/';
+        if (!filter_var($server_host, FILTER_VALIDATE_URL)) {
+            $server_host = _server('HTTP_HOST') . '/';
         }
-        $s3 = ($url != "/") ? ltrim($url, '/') : '';
+        $uri = ($url != "/") ? ltrim($url, '/') : '';
 
-        return sprintf("%s://%s%s", $s1, $s2, $s3);
+        return sprintf("%s://%s%s", $scheme, $server_host, $uri);
     }
 }
 
@@ -468,6 +490,30 @@ if (!function_exists('is_json')) {
     }
 }
 
+if (!function_exists('load_image')) {
+    /**
+     * Generate image tag
+     *
+     * @param string $file
+     * @param array $attributes
+     * @return string
+     */
+    function _load_image($file = "", $attributes = [])
+    {
+        if (file_exists(public_path($file))) {
+            $mtime = filemtime(public_path($file));
+            $attr = '';
+            if (!empty($attributes)) {
+                foreach ($attributes as $key => $value) {
+                    $attr .= ' ' . $key . '="' . $value . '"';
+                }
+            }
+
+            return '<img src="' . url($file) . '?' . $mtime . '"' . $attr . '>';
+        }
+    }
+}
+
 if (!function_exists('load_css')) {
     /**
      * Generate link stylesheet tag
@@ -480,7 +526,7 @@ if (!function_exists('load_css')) {
     {
         if (file_exists(public_path($file))) {
             $mtime = filemtime(public_path($file));
-            $attr = ' rel="stylesheet"';
+            $attr = ' rel="stylesheet" type="text/css"';
             if (!empty($attributes)) {
                 $attr = '';
                 foreach ($attributes as $key => $value) {
@@ -527,6 +573,27 @@ if (!function_exists('public_path')) {
      */
     function public_path($file = "")
     {
-        return PUBLIC_PATH . $file;
+        if (defined('PUBLIC_PATH')) {
+            return PUBLIC_PATH . $file;
+        }
+
+        return null;
+    }
+}
+
+if (!function_exists('storage_path')) {
+    /**
+     * Get storage folder path
+     *
+     * @param string $file
+     * @return string
+     */
+    function storage_path($file = "")
+    {
+        if (defined('STORAGE_PATH')) {
+            return STORAGE_PATH . $file;
+        }
+
+        return null;
     }
 }
