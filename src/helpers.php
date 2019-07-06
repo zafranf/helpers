@@ -498,7 +498,7 @@ if (!function_exists('load_image')) {
      * @param array $attributes
      * @return string
      */
-    function _load_image($file = "", $attributes = [])
+    function load_image($file = "", $attributes = [])
     {
         if (file_exists(public_path($file))) {
             $mtime = filemtime(public_path($file));
@@ -522,7 +522,7 @@ if (!function_exists('load_css')) {
      * @param array $attributes
      * @return string
      */
-    function _load_css($file = "", $attributes = [])
+    function load_css($file = "", $attributes = [])
     {
         if (file_exists(public_path($file))) {
             $mtime = filemtime(public_path($file));
@@ -547,7 +547,7 @@ if (!function_exists('load_js')) {
      * @param array $attributes
      * @return string
      */
-    function _load_js($file = "", $attributes = [])
+    function load_js($file = "", $attributes = [])
     {
         if (file_exists(public_path($file))) {
             $mtime = filemtime(public_path($file));
