@@ -182,7 +182,7 @@ if (!function_exists('_file')) {
      * @param string $name
      * @return array
      */
-    function _file($name)
+    function _file($name = null)
     {
         $fl = null;
 
@@ -275,7 +275,7 @@ if (!function_exists('debug')) {
     }
 }
 
-if (!function_exists('slug')) {
+if (!function_exists('str_slug')) {
     /**
      * Convert string to slug
      *
@@ -283,16 +283,16 @@ if (!function_exists('slug')) {
      * @param string $separator
      * @return string
      */
-    function slug($str, $separator = "-")
+    function str_slug($str, $separator = "-")
     {
-        $slug = lowcase($str);
-        $slug = preg_replace('([\s\W\_]+)', $separator, $slug);
+        $str = lowcase($str);
+        $str = preg_replace('([\s\W\_]+)', $separator, $str);
 
-        return $slug;
+        return $str;
     }
 }
 
-if (!function_exists('cut')) {
+if (!function_exists('str_cut')) {
     /**
      * Cut some text
      *
@@ -302,7 +302,7 @@ if (!function_exists('cut')) {
      * @param string $separator
      * @return string
      */
-    function cut($text, $start = 50, $end = 5, $separator = "...")
+    function str_cut($text, $start = 50, $end = 5, $separator = "...")
     {
         $min = $start + $end;
         if (strlen($text) > $min) {
@@ -313,6 +313,16 @@ if (!function_exists('cut')) {
         }
 
         return $text;
+    }
+}
+
+if (!function_exists('str_sanitize')) {
+    /**
+     * Sanitize string
+     */
+    function str_sanitize($string)
+    {
+        return trim(e($string));
     }
 }
 
@@ -327,16 +337,6 @@ if (!function_exists('spaces')) {
     function spaces($n = 4, $space = "&nbsp;")
     {
         return str_repeat($space, $n);
-    }
-}
-
-if (!function_exists('sanitize')) {
-    /**
-     * Sanitize string
-     */
-    function sanitize($string)
-    {
-        return trim(e($string));
     }
 }
 
@@ -425,7 +425,7 @@ if (!function_exists('url')) {
      * @param boolean $full
      * @return string
      */
-    function url($url = "", $pars = [])
+    function url($url = "", $secure = false)
     {
         /* validas8 */
         if (filter_var($url, FILTER_VALIDATE_URL)) {
