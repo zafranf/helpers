@@ -77,7 +77,7 @@ if (!function_exists('_cookie')) {
     }
 }
 
-if (!function_exists('_input')) {
+if (!function_exists('_request')) {
     /**
      * Alias for $_REQUEST
      *
@@ -85,7 +85,7 @@ if (!function_exists('_input')) {
      * @param boolean $int
      * @return array
      */
-    function _input($key = null, $default = null)
+    function _request($key = null, $default = null)
     {
         /* Check $key */
         if (is_null($key)) {
@@ -135,6 +135,37 @@ if (!function_exists('_post')) {
      */
     function _post($key = null, $default = null)
     {
+        /* Check $key */
+        if (is_null($key)) {
+            return $_POST;
+        }
+
+        /* Check requested string */
+        if (isset($_POST[$key])) {
+            return $_POST[$key];
+        }
+
+        return $default;
+    }
+}
+
+if (!function_exists('_input')) {
+    /**
+     * Handle php input
+     *
+     * @param string $key
+     * @param boolean $int
+     * @return array
+     */
+    function _input($key = null, $default = null)
+    {
+        $input = file_get_contents("php://input");
+        if (is_json($input)) {
+            $_POST = (array) json_decode($input);
+        } else {
+            parse_str(file_get_contents("php://input"), $_POST);
+        }
+
         /* Check $key */
         if (is_null($key)) {
             return $_POST;
