@@ -491,7 +491,7 @@ if (!function_exists('bool')) {
      */
     function bool($str = "")
     {
-        $true = ['true', 't', 'yes', 'y', '1', 'on'];
+        $true = ['true', 't', 'yes', 'y', '1', 'on', 'active'];
 
         if (is_string($str) || is_int($str) || is_bool($str)) {
             $str = strtolower(trim($str));
