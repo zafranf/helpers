@@ -135,6 +135,13 @@ if (!function_exists('_post')) {
      */
     function _post($key = null, $default = null)
     {
+        $input = file_get_contents("php://input");
+        if (is_json($input)) {
+            $_POST = (array) json_decode($input);
+        } else {
+            parse_str(file_get_contents("php://input"), $_POST);
+        }
+
         /* Check $key */
         if (is_null($key)) {
             return $_POST;
@@ -159,21 +166,14 @@ if (!function_exists('_input')) {
      */
     function _input($key = null, $default = null)
     {
-        $input = file_get_contents("php://input");
-        if (is_json($input)) {
-            $_POST = (array) json_decode($input);
-        } else {
-            parse_str(file_get_contents("php://input"), $_POST);
-        }
-
         /* Check $key */
         if (is_null($key)) {
-            return $_POST;
+            return $_REQUEST;
         }
 
         /* Check requested string */
-        if (isset($_POST[$key])) {
-            return $_POST[$key];
+        if (isset($_REQUEST[$key])) {
+            return $_REQUEST[$key];
         }
 
         return $default;
