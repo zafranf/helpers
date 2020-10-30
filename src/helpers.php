@@ -136,10 +136,12 @@ if (!function_exists('_post')) {
     function _post($key = null, $default = null)
     {
         $input = file_get_contents("php://input");
-        if (is_json($input)) {
-            $_POST = (array) json_decode($input);
-        } else {
-            parse_str(file_get_contents("php://input"), $_POST);
+        if (!empty($input)) {
+            if (is_json($input)) {
+                $_POST = (array) json_decode($input);
+            } else {
+                parse_str(file_get_contents("php://input"), $_POST);
+            }
         }
 
         /* Check $key */
