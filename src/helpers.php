@@ -361,7 +361,7 @@ if (!function_exists('str_sanitize')) {
 
 if (!function_exists('spaces')) {
     /**
-     * Undocumented function
+     * Create empty spaces
      *
      * @param integer $n
      * @param string $space
@@ -405,7 +405,7 @@ if (!function_exists('redirect')) {
 
 if (!function_exists('response')) {
     /**
-     * Undocumented function
+     * Create response
      *
      * @param [type] $data
      * @param integer $statusCode
@@ -450,6 +450,52 @@ if (!function_exists('lowcase')) {
     }
 }
 
+
+if (!function_exists('msleep')) {
+    /**
+     * Milliseconds Sleep
+     * Alias for usleep * 1000
+     *
+     * @param integer $ms
+     * @return void
+     */
+    function msleep(int $ms)
+    {
+        usleep($ms * 1000);
+    }
+}
+
+if (!function_exists('pad_left')) {
+    /**
+     * Alias for STR_PAD_LEFT
+     *
+     * @param string $string
+     * @param integer $length
+     * @param string $pad_string
+     * @return string
+     */
+    function pad_left(string $string, int $length, string $pad_string = " ")
+    {
+        return str_pad($string, $length, $pad_string, STR_PAD_LEFT);
+    }
+}
+
+
+if (!function_exists('pad_right')) {
+    /**
+     * Alias for STR_PAD_LEFT
+     *
+     * @param string $string
+     * @param integer $length
+     * @param string $pad_string
+     * @return string
+     */
+    function pad_right(string $string, int $length, string $pad_string = " ")
+    {
+        return str_pad($string, $length, $pad_string, STR_PAD_RIGHT);
+    }
+}
+
 if (!function_exists('url')) {
     /**
      * Create url
@@ -486,7 +532,7 @@ if (!function_exists('url')) {
 
 if (!function_exists('bool')) {
     /**
-     * Convert string to boolean
+     * Check boolean values
      *
      * @param string $str
      * @return boolean
@@ -507,7 +553,7 @@ if (!function_exists('bool')) {
 
 if (!function_exists('is_json')) {
     /**
-     * Validate string to json
+     * Validate string is json
      *
      * @param string $data
      * @return boolean
